@@ -1,0 +1,17 @@
+{
+  "name": "ai-tools-docs",
+  "version": "1.0.0",
+  "description": "AI工具与大模型部署文档站",
+  "type": "module",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "keywords": ["AI", "LLM", "VitePress", "documentation"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}
