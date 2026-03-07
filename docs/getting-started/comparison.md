@@ -2,20 +2,24 @@
 
 本文档从多个维度对比主流大语言模型，帮助你选择最适合的模型。
 
+::: tip 数据更新
+本文档最后更新于 **2026年3月**，信息可能随时变化，请以官方最新发布为准。
+:::
+
 ## 综合能力对比
 
-### 排行榜概览（2024年）
+### 排行榜概览（2026年）
 
-以下是主要评测榜单的大致排名（可能有变化）：
+以下是主要评测榜单的大致排名：
 
 | 模型 | 综合能力 | 编程 | 数学 | 推理 |
 |------|----------|------|------|------|
-| GPT-4o | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| Claude 3.5 Sonnet | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| Gemini 1.5 Pro | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| DeepSeek V3 | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| Llama 3.1 405B | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| Qwen 2.5 72B | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| GPT-5.4 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Claude Opus 4.6 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Gemini 2.0 Pro | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| DeepSeek V4 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| Qwen 2.5 Max | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| Llama 3.3 70B | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
 
 ---
 
@@ -25,45 +29,47 @@
 
 | 模型 | 输入 | 输出 | 备注 |
 |------|------|------|------|
-| GPT-4o | $2.50 | $10.00 | 标准定价 |
-| GPT-4o-mini | $0.15 | $0.60 | 轻量版 |
-| Claude 3.5 Sonnet | $3.00 | $15.00 | 标准定价 |
-| Claude 3 Haiku | $0.25 | $1.25 | 轻量版 |
-| Gemini 1.5 Pro | $1.25 | $5.00 | 标准定价 |
-| Gemini 1.5 Flash | $0.075 | $0.30 | 轻量版 |
-| DeepSeek V3 | $0.27 | $1.10 | 极具性价比 |
-| DeepSeek R1 | $0.55 | $2.19 | 推理模型 |
+| GPT-5.4 | $5.00 | $25.00 | 旗舰版 |
+| GPT-5.4-mini | $0.30 | $1.20 | 轻量版 |
+| Claude Opus 4.6 | $5.00 | $25.00 | 最新旗舰 |
+| Claude Sonnet 4 | $3.00 | $15.00 | 平衡版 |
+| Claude Haiku 4 | $0.50 | $2.00 | 轻量版 |
+| Gemini 2.0 Pro | $2.50 | $10.00 | 标准定价 |
+| Gemini 2.0 Flash | $0.15 | $0.60 | 轻量版 |
+| DeepSeek V4 | $0.35 | $1.40 | 高性价比 |
+| DeepSeek R2 | $0.70 | $2.80 | 推理模型 |
+| Qwen 2.5 Max | $2.00 | $8.00 | 国产旗舰 |
 
 ::: tip 省钱技巧
 - 简单任务用轻量版模型（mini/flash/haiku）
 - DeepSeek 性价比最高
 - 开源模型本地部署零成本
+- 使用 Prompt Caching 可节省 50%-90% 输入成本
 :::
 
 ---
 
 ## 编程能力对比
 
-### HumanEval 基准测试
+### SWE-Bench 基准测试（2026年）
 
-| 模型 | Pass@1 分数 |
-|------|-------------|
-| Claude 3.5 Sonnet | 92.0% |
-| GPT-4o | 90.2% |
-| DeepSeek V3 | 89.2% |
-| Gemini 1.5 Pro | 84.1% |
-| Llama 3.1 70B | 80.5% |
-| Qwen 2.5 72B | 86.4% |
+| 模型 | SWE-Bench 分数 |
+|------|----------------|
+| Claude Opus 4.6 | 75.0%+ |
+| Claude Sonnet 4 | 72.7% |
+| GPT-5.4 | 70%+ |
+| DeepSeek V4 | 80%+ |
+| Qwen 2.5 Max | 68%+ |
 
 ### 编程场景推荐
 
 | 场景 | 推荐模型 | 原因 |
 |------|----------|------|
-| 代码生成 | Claude 3.5 Sonnet | 准确度最高 |
-| 代码解释 | GPT-4o | 解释清晰 |
-| Debug调试 | Claude 3.5 Sonnet | 善于定位问题 |
+| 代码生成 | Claude Opus 4.6 | 准确度最高 |
+| 代码解释 | GPT-5.4 | 解释清晰 |
+| Debug调试 | Claude Opus 4.6 | 善于定位问题 |
 | 代码补全 | GitHub Copilot | IDE集成好 |
-| 开源部署 | DeepSeek V3 | 能力强+免费 |
+| 开源部署 | DeepSeek V4 | 能力强+免费 |
 
 ---
 
@@ -71,12 +77,12 @@
 
 | 模型 | 中文理解 | 中文写作 | 中文编程 |
 |------|----------|----------|----------|
-| GPT-4o | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| Claude 3.5 | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| Qwen 2.5 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| DeepSeek | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| GPT-5.4 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| Claude 4.6 | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| Qwen 2.5 Max | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| DeepSeek V4 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
 
-**中文任务推荐**：Qwen 2.5、DeepSeek、GPT-4o
+**中文任务推荐**：Qwen 2.5、DeepSeek V4、GPT-5.4
 
 ---
 
@@ -84,16 +90,14 @@
 
 | 模型 | 最大上下文 | 长文本理解 |
 |------|------------|------------|
-| Gemini 1.5 Pro | 1M tokens | ⭐⭐⭐⭐⭐ |
-| Gemini 1.5 Flash | 1M tokens | ⭐⭐⭐⭐ |
-| Claude 3.5 Sonnet | 200K | ⭐⭐⭐⭐⭐ |
-| Claude 3 Opus | 200K | ⭐⭐⭐⭐⭐ |
-| GPT-4o | 128K | ⭐⭐⭐⭐ |
-| DeepSeek V3 | 128K | ⭐⭐⭐⭐ |
-| Llama 3.1 | 128K | ⭐⭐⭐⭐ |
+| Gemini 2.0 Pro | 2M tokens | ⭐⭐⭐⭐⭐ |
+| GPT-5.4 | 1M tokens | ⭐⭐⭐⭐⭐ |
+| Claude Opus 4.6 | 1M tokens | ⭐⭐⭐⭐⭐ |
+| DeepSeek V4 | 1M tokens | ⭐⭐⭐⭐⭐ |
+| Qwen 2.5 Max | 1M tokens | ⭐⭐⭐⭐ |
 
 ::: info 什么是1M上下文？
-1M tokens 约等于 75万个英文单词或 50万个中文字，相当于几本书的内容。
+1M tokens 约等于 75万个英文单词或 50万个中文字，相当于几本书的内容。2M 则是双倍。
 :::
 
 ---
@@ -104,22 +108,22 @@
 
 | 模型 | 参数量 | 最低显存 | 推荐显存 |
 |------|--------|----------|----------|
-| Llama 3.2 3B | 3B | 6GB | 8GB |
-| Llama 3.1 8B | 8B | 8GB | 12GB |
+| Llama 3.3 8B | 8B | 8GB | 12GB |
 | Qwen 2.5 7B | 7B | 8GB | 12GB |
-| DeepSeek R1 7B | 7B | 8GB | 12GB |
-| Llama 3.1 70B | 70B | 40GB | 48GB |
+| DeepSeek R2 7B | 7B | 8GB | 12GB |
+| Qwen 2.5 32B | 32B | 24GB | 32GB |
+| Llama 3.3 70B | 70B | 40GB | 48GB |
 | Qwen 2.5 72B | 72B | 40GB | 48GB |
-| Llama 3.1 405B | 405B | 200GB+ | 多卡部署 |
+| DeepSeek V4 | ~320B活跃 | 80GB+ | 多卡部署 |
 
 ### 本地部署推荐
 
 | 显卡 | 推荐模型 |
 |------|----------|
-| RTX 3060 (12GB) | Llama 3.2 3B、Qwen 2.5 7B |
-| RTX 4070 (12GB) | Llama 3.1 8B、DeepSeek 7B |
-| RTX 4090 (24GB) | Llama 3.1 70B (量化) |
-| A100 (80GB) | Llama 3.1 70B、Qwen 72B |
+| RTX 3060 (12GB) | Llama 3.3 8B、Qwen 2.5 7B |
+| RTX 4070 (12GB) | Llama 3.3 8B、DeepSeek 7B |
+| RTX 4090 (24GB) | Qwen 2.5 32B、Llama 70B(量化) |
+| A100 (80GB) | Llama 3.3 70B、Qwen 72B |
 
 ---
 
@@ -127,10 +131,10 @@
 
 | 模型 | 文本 | 图像 | 音频 | 视频 |
 |------|------|------|------|------|
-| GPT-4o | ✅ | ✅ | ✅ | ✅ |
-| Claude 3.5 | ✅ | ✅ | ❌ | ❌ |
-| Gemini 1.5 | ✅ | ✅ | ✅ | ✅ |
-| Llama 3.2 | ✅ | ✅ | ❌ | ❌ |
+| GPT-5.4 | ✅ | ✅ | ✅ | ✅ |
+| Claude 4.6 | ✅ | ✅ | ❌ | ❌ |
+| Gemini 2.0 | ✅ | ✅ | ✅ | ✅ |
+| DeepSeek V4 | ✅ | ✅ | ✅ | ✅ |
 | Qwen-VL | ✅ | ✅ | ❌ | ❌ |
 
 ---
@@ -144,19 +148,19 @@
     └── ChatGPT 免费版 / Claude.ai 免费版
 
 日常编程
-    └── Claude 3.5 Sonnet + Cursor
+    └── Claude Opus 4.6 + Cursor
 
 企业应用
-    └── GPT-4o API / Claude API
+    └── GPT-5.4 API / Claude 4.6 API
 
 本地部署
-    └── Llama 3.1 / Qwen 2.5 / DeepSeek
+    └── Llama 3.3 / Qwen 2.5 / DeepSeek V4
 
 长文档分析
-    └── Gemini 1.5 Pro / Claude 3
+    └── Gemini 2.0 Pro / Claude 4.6
 
 成本敏感
-    └── DeepSeek API / 本地开源模型
+    └── DeepSeek V4 API / 本地开源模型
 ```
 
 ### 按预算
@@ -164,8 +168,8 @@
 | 预算 | 推荐 |
 |------|------|
 | 免费 | ChatGPT/Claude 免费版、本地开源模型 |
-| 低成本 | DeepSeek API、GPT-4o-mini |
-| 中等预算 | GPT-4o、Claude 3.5 Sonnet |
+| 低成本 | DeepSeek API、GPT-5.4-mini |
+| 中等预算 | GPT-5.4、Claude Sonnet 4 |
 | 企业级 | 各家API按需选择 |
 
 ---
@@ -174,11 +178,11 @@
 
 | 需求 | 最佳选择 |
 |------|----------|
-| 综合最强 | GPT-4o / Claude 3.5 Sonnet |
-| 编程最强 | Claude 3.5 Sonnet |
-| 长上下文 | Gemini 1.5 Pro |
-| 最具性价比 | DeepSeek |
-| 中文最佳 | Qwen 2.5 / DeepSeek |
-| 本地部署 | Llama 3.1 / Qwen 2.5 |
+| 综合最强 | GPT-5.4 / Claude Opus 4.6 |
+| 编程最强 | Claude Opus 4.6 |
+| 长上下文 | Gemini 2.0 Pro / GPT-5.4 |
+| 最具性价比 | DeepSeek V4 |
+| 中文最佳 | Qwen 2.5 Max / DeepSeek V4 |
+| 本地部署 | Llama 3.3 / Qwen 2.5 / DeepSeek |
 
 没有"最好"的模型，只有"最适合"的模型。根据你的具体需求选择！

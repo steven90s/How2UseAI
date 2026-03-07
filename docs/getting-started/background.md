@@ -53,7 +53,9 @@
   │
 2024 ─── Claude 3、GPT-4o、Llama 3、DeepSeek V3
   │
-2025 ─── DeepSeek R1、Claude 3.5 Sonnet...
+2025 ─── DeepSeek R1、Claude 3.5 Sonnet、Claude 4
+  │
+2026 ─── GPT-5.4、Claude Opus 4.6、DeepSeek V4...
 ```
 
 ## 关键技术突破
