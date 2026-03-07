@@ -7,10 +7,23 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
+      { text: '入门', link: '/getting-started/' },
       { text: 'AI工具', link: '/ai-tools/' },
       { text: '大模型部署', link: '/llm-deployment/' }
     ],
     sidebar: {
+      '/getting-started/': [
+        {
+          text: '入门指南',
+          items: [
+            { text: '入门概览', link: '/getting-started/' },
+            { text: 'AI起源与背景', link: '/getting-started/background' },
+            { text: '名词解释', link: '/getting-started/glossary' },
+            { text: '模型介绍', link: '/getting-started/models' },
+            { text: '模型对比', link: '/getting-started/comparison' }
+          ]
+        }
+      ],
       '/ai-tools/': [
         {
           text: 'AI工具',

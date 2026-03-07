@@ -4,16 +4,19 @@ layout: home
 hero:
   name: "AI工具与大模型部署"
   text: "完整指南"
-  tagline: 记录AI工具使用方法和大模型部署的详细步骤，助你成为AI开发高手
+  tagline: 从入门到精通，记录AI工具使用方法和大模型部署的详细步骤
   actions:
     - theme: brand
-      text: 开始探索
-      link: /ai-tools/
+      text: 新手入门
+      link: /getting-started/
     - theme: alt
-      text: 大模型部署
-      link: /llm-deployment/
+      text: AI工具
+      link: /ai-tools/
 
 features:
+  - icon: 📚
+    title: 入门指南
+    details: AI起源背景、名词解释、主流模型介绍与对比，帮助你快速了解AI世界
   - icon: 🛠️
     title: AI工具指南
     details: 详细介绍Cursor、Claude Code、GitHub Copilot等AI编程工具的使用方法和最佳实践
@@ -23,9 +26,6 @@ features:
   - icon: 📖
     title: 实战案例
     details: 包含大量实际使用场景和代码示例，帮助你快速上手
-  - icon: 🔄
-    title: 持续更新
-    details: 随着AI技术发展，持续更新最新的工具和部署方案
 ---
 
 <style>
