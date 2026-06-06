@@ -4,9 +4,9 @@
   "description": "AI工具与大模型部署文档站",
   "type": "module",
   "scripts": {
-    "docs:dev": "vitepress dev docs",
+    "docs:dev": "vitepress dev docs --host 0.0.0.0 --port 808",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs --host 0.0.0.0 --port 808"
   },
   "keywords": ["AI", "LLM", "VitePress", "documentation"],
   "author": "",
