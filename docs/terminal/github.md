@@ -15,6 +15,30 @@ GitHub 是基于 Git 的代码托管和协作平台。Git 负责本地版本控�
 GitHub 的很多操作都建立在 Git 基础上。如果还不熟悉 `git status`、`git add`、`git commit`、`git push`，建议先看 [Git 使用教程](/terminal/git)。
 :::
 
+## 从本地到 GitHub 的最短路线
+
+新手最容易卡在“本地文件夹”和“GitHub 仓库”之间的关系。可以先记住这条线：
+
+```text
+本地项目文件夹 -> git init -> git commit -> GitHub 创建空仓库 -> git remote add origin -> git push
+```
+
+如果是新电脑，还要先做一次 SSH 认证：
+
+```text
+生成 SSH Key -> 把公钥添加到 GitHub -> ssh -T git@github.com 测试 -> clone / push / pull
+```
+
+常见场景：
+
+| 场景 | 应该做什么 |
+|------|------------|
+| 新电脑第一次连接 GitHub | 配置 Git 用户信息，生成 SSH Key，把公钥添加到 GitHub |
+| 本地已经有项目，GitHub 还没有仓库 | GitHub 创建空仓库，本地添加 `origin`，第一次 push |
+| GitHub 已经有仓库，本地还没有代码 | 直接 `git clone` |
+| 本地仓库已经绑定 HTTPS | 用 `git remote set-url` 改成 SSH |
+| 换电脑开发同一个项目 | 新电脑单独生成一把 SSH Key，再 clone 仓库 |
+
 ## GitHub 常见功能
 
 | 功能 | 用途 | 适合场景 |
@@ -55,7 +79,26 @@ GitHub 支持两种常见连接方式：
 | HTTPS | 地址像 `https://github.com/user/repo.git`，可配合 GitHub CLI 或 Token 认证 | 新手、临时电脑、公司受限网络 |
 | SSH | 地址像 `git@github.com:user/repo.git`，用 SSH Key 认证 | 长期开发电脑、频繁 push/pull |
 
-### 配置 SSH Key
+建议：
+
+- 自己长期使用的电脑优先配置 SSH
+- 临时电脑、公司受限网络或无法配置 SSH 时用 HTTPS
+- 不要把账号密码当作 Git 密码使用；HTTPS 推送通常需要 GitHub CLI、Credential Manager 或 Personal Access Token
+
+## 本地设备关联 GitHub：SSH Key 设置
+
+SSH Key 可以理解为“这台电脑访问 GitHub 的身份证”。它分成两部分：
+
+| 文件 | 用途 | 能不能公开 |
+|------|------|------------|
+| 私钥，例如 `~/.ssh/id_ed25519` | 留在本机，用来证明你是你 | 不能公开，不能发给别人，不能提交到仓库 |
+| 公钥，例如 `~/.ssh/id_ed25519.pub` | 添加到 GitHub 账号里 | 可以复制到 GitHub |
+
+::: warning 一台设备一把 Key
+不要多台电脑共用同一把私钥。每台电脑各自生成 SSH Key，然后把每台电脑的公钥分别添加到 GitHub。设备丢失或离职时，只撤销那台设备的 Key。
+:::
+
+### 1. 检查是否已有 SSH Key
 
 先检查是否已有 SSH Key：
 
@@ -63,11 +106,65 @@ GitHub 支持两种常见连接方式：
 ls -al ~/.ssh
 ```
 
-如果没有，可以生成一个：
+常见公钥文件名：
+
+```text
+id_ed25519.pub
+id_ecdsa.pub
+id_rsa.pub
+```
+
+如果看到了 `.pub` 文件，说明本机可能已经有可用公钥。如果没有 `~/.ssh` 目录，或者没有这些文件，就生成新的。
+
+### 2. 生成新的 SSH Key
+
+优先使用 Ed25519：
 
 ```bash
 ssh-keygen -t ed25519 -C "你的邮箱@example.com"
 ```
+
+过程中会问你保存路径。新手直接按回车即可，默认保存到：
+
+```text
+~/.ssh/id_ed25519
+```
+
+也会问你是否设置 passphrase。建议设置一个你能记住的密码短语，这样即使私钥文件泄露，也多一道保护。
+
+如果系统太旧，不支持 Ed25519，可以使用 RSA 4096：
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "你的邮箱@example.com"
+```
+
+### 3. 启动 ssh-agent 并添加私钥
+
+macOS / Linux / Git Bash：
+
+```bash
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+```
+
+macOS 如果希望把 passphrase 保存到钥匙串，可使用：
+
+```bash
+ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+```
+
+Windows PowerShell 可以先启用 OpenSSH Authentication Agent：
+
+```powershell
+Get-Service ssh-agent
+Set-Service -Name ssh-agent -StartupType Manual
+Start-Service ssh-agent
+ssh-add $env:USERPROFILE\.ssh\id_ed25519
+```
+
+如果你使用 Git Bash，通常也可以使用前面的 `eval "$(ssh-agent -s)"` 写法。
+
+### 4. 复制公钥
 
 查看公钥：
 
@@ -75,13 +172,40 @@ ssh-keygen -t ed25519 -C "你的邮箱@example.com"
 cat ~/.ssh/id_ed25519.pub
 ```
 
-复制输出内容，打开 GitHub：
+macOS 可以直接复制到剪贴板：
+
+```bash
+pbcopy < ~/.ssh/id_ed25519.pub
+```
+
+Windows PowerShell：
+
+```powershell
+Get-Content $env:USERPROFILE\.ssh\id_ed25519.pub | Set-Clipboard
+```
+
+Linux 桌面环境如果有 `xclip`：
+
+```bash
+xclip -selection clipboard < ~/.ssh/id_ed25519.pub
+```
+
+只复制 `.pub` 文件内容，不要复制私钥。
+
+### 5. 添加公钥到 GitHub
+
+打开 GitHub：
 
 1. 点击右上角头像
 2. 进入 Settings
-3. 打开 SSH and GPG keys
-4. 点击 New SSH key
-5. 粘贴公钥并保存
+3. 在 Access 中打开 SSH and GPG keys
+4. 点击 New SSH key 或 Add SSH key
+5. Title 写清楚设备名，例如 `MacBook Pro - Steven`
+6. Key type 选择 Authentication Key
+7. 在 Key 里粘贴公钥
+8. 点击 Add SSH key
+
+### 6. 测试 SSH 连接
 
 测试连接：
 
@@ -89,9 +213,51 @@ cat ~/.ssh/id_ed25519.pub
 ssh -T git@github.com
 ```
 
+第一次连接时会询问是否信任 GitHub 主机指纹，确认是 GitHub 后输入 `yes`。
+
+成功时通常会看到类似：
+
+```text
+Hi USERNAME! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
+这句话表示 SSH 认证成功。GitHub 不提供普通 shell 登录，所以后半句不是错误。
+
 ::: warning 不要复制私钥
 只把 `.pub` 结尾的公钥添加到 GitHub。没有 `.pub` 的私钥不能发给任何人，也不要提交到仓库。
 :::
+
+### 7. 常见 SSH 问题
+
+| 问题 | 可能原因 | 处理方法 |
+|------|----------|----------|
+| `Permission denied (publickey)` | GitHub 没有你的公钥，或本机没有加载对应私钥 | 检查 GitHub SSH keys、运行 `ssh-add -l`、重新 `ssh-add ~/.ssh/id_ed25519` |
+| `Host key verification failed` | 本机记录的 GitHub 主机指纹异常或过期 | 检查 `~/.ssh/known_hosts`，对照 GitHub 官方指纹后再处理 |
+| `remote origin already exists` | 本地已经有 `origin` 远程地址 | 用 `git remote -v` 查看，再用 `git remote set-url origin ...` 修改 |
+| push 时仍走 HTTPS | remote 地址还是 HTTPS | 改成 `git@github.com:OWNER/REPO.git` |
+| 多账号串号 | 同一台电脑有多个 GitHub 账号和 key | 用 `~/.ssh/config` 为不同账号配置不同 Host |
+
+多账号示例：
+
+```text
+Host github-personal
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519_personal
+  IdentitiesOnly yes
+
+Host github-work
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519_work
+  IdentitiesOnly yes
+```
+
+对应 remote：
+
+```bash
+git remote set-url origin git@github-personal:your-name/repo.git
+```
 
 ## 创建仓库
 
@@ -104,7 +270,26 @@ ssh -T git@github.com
 5. 可选：添加 README、`.gitignore`、License
 6. 点击 Create repository
 
-### 把本地项目推到 GitHub
+### 仓库初始化选项怎么选
+
+| 选项 | 建议 |
+|------|------|
+| Repository name | 用小写英文、数字和短横线，例如 `how2useai` |
+| Description | 简短说明项目用途 |
+| Public / Private | 学习项目可公开；公司、客户、密钥、内部资料必须私有 |
+| Add a README | 如果本地已有项目，建议先不要勾选，避免首次 push 冲突 |
+| Add .gitignore | 新项目可以选；已有项目建议本地自己维护 |
+| Choose a license | 开源项目再选；私有项目可先不选 |
+
+::: tip 本地已有项目时创建空仓库
+如果你本地已经有完整项目，GitHub 新建仓库时不要勾选 README、`.gitignore`、License。创建一个空仓库，然后从本地第一次 push，流程最顺。
+:::
+
+## 本地项目关联 GitHub 仓库
+
+### 场景一：本地已有项目，GitHub 还没有代码
+
+在 GitHub 创建空仓库后，回到本地项目目录：
 
 ```bash
 cd my-project
@@ -112,22 +297,98 @@ git init
 git add .
 git commit -m "chore: initial commit"
 git branch -M main
-git remote add origin git@github.com:user/repo.git
+git remote add origin git@github.com:OWNER/REPOSITORY.git
 git push -u origin main
 ```
+
+推送成功后，刷新 GitHub 仓库页面，就能看到本地项目文件。
 
 如果使用 HTTPS：
 
 ```bash
-git remote add origin https://github.com/user/repo.git
+git remote add origin https://github.com/OWNER/REPOSITORY.git
 git push -u origin main
 ```
 
-### 克隆已有仓库
+### 场景二：本地已经是 Git 仓库，只差绑定远程
+
+先查看当前 remote：
 
 ```bash
-git clone git@github.com:user/repo.git
-cd repo
+git remote -v
+```
+
+如果没有输出，添加远程：
+
+```bash
+git remote add origin git@github.com:OWNER/REPOSITORY.git
+git push -u origin main
+```
+
+如果已经有 `origin`，但地址不对，用 `set-url` 修改：
+
+```bash
+git remote set-url origin git@github.com:OWNER/REPOSITORY.git
+git remote -v
+git push -u origin main
+```
+
+### 场景三：远程已经有仓库，本地要下载
+
+使用 SSH 克隆：
+
+```bash
+git clone git@github.com:OWNER/REPOSITORY.git
+cd REPOSITORY
+```
+
+使用 HTTPS 克隆：
+
+```bash
+git clone https://github.com/OWNER/REPOSITORY.git
+cd REPOSITORY
+```
+
+### 场景四：把 HTTPS remote 改成 SSH
+
+```bash
+git remote -v
+git remote set-url origin git@github.com:OWNER/REPOSITORY.git
+git remote -v
+ssh -T git@github.com
+git push
+```
+
+修改前：
+
+```text
+origin  https://github.com/OWNER/REPOSITORY.git (fetch)
+origin  https://github.com/OWNER/REPOSITORY.git (push)
+```
+
+修改后：
+
+```text
+origin  git@github.com:OWNER/REPOSITORY.git (fetch)
+origin  git@github.com:OWNER/REPOSITORY.git (push)
+```
+
+### 场景五：GitHub 仓库已有 README，本地也已有提交
+
+如果 GitHub 仓库创建时勾选了 README，本地第一次 push 可能提示远端有你没有的提交。新手可以这样处理：
+
+```bash
+git pull --rebase origin main
+git push -u origin main
+```
+
+如果出现冲突，先解决冲突，再继续：
+
+```bash
+git status
+git add .
+git rebase --continue
+git push -u origin main
 ```
 
 ## GitHub Flow
@@ -601,6 +862,11 @@ branch 是同一个仓库里的分支；fork 是复制一份仓库到你的账�
 - [GitHub Docs](https://docs.github.com/)
 - [GitHub Git 入门](https://docs.github.com/en/get-started/using-git/about-git)
 - [Set up Git](https://docs.github.com/en/get-started/quickstart/set-up-git)
+- [GitHub SSH 连接说明](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh)
+- [生成 SSH Key 并加入 ssh-agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+- [添加 SSH Key 到 GitHub](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+- [测试 SSH 连接](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection)
+- [管理远程仓库](https://docs.github.com/en/get-started/git-basics/managing-remote-repositories)
 - [GitHub Pull Requests](https://docs.github.com/pull-requests)
 - [GitHub Authentication](https://docs.github.com/en/authentication)
 - [GitHub CLI](https://docs.github.com/en/github-cli/github-cli/about-github-cli)

@@ -9,7 +9,7 @@ OpenCode 是一个开源 AI 编程 Agent，可以在终端、桌面应用或 IDE
 | 问题 | 简短答案 |
 |------|----------|
 | OpenCode 是什么？ | 开源 AI coding agent，主打终端 TUI，也有桌面和 IDE 入口 |
-| 需要什么账号？ | 需要可用的大模型 Provider，例如 OpenCode Zen、OpenAI、Anthropic、Google、xAI、本地模型等 |
+| 需要什么账号？ | 需要可用的大模型 Provider，例如 OpenCode Zen、OpenAI、Anthropic、Google、xAI、DeepSeek、Moonshot、本地模型等 |
 | 怎么安装？ | 推荐官方安装脚本，也可用 npm、Bun、pnpm、Yarn、Homebrew、Chocolatey、Scoop、Docker 等 |
 | Windows 能用吗？ | 能用，但官方推荐 WSL，兼容性和体验更好 |
 | 怎么初始化项目？ | 在项目目录运行 `opencode`，进入 TUI 后执行 `/init`，生成 `AGENTS.md` |
@@ -189,6 +189,117 @@ git commit -m "chore: add agent instructions"
 | xAI | 想用 Grok 系列模型 |
 | DeepSeek / Qwen / Z.AI 等 | 想尝试其他模型或更低成本方案 |
 | 本地模型 | 需要本地运行或离线实验 |
+
+## OpenCode 支持哪些模型？
+
+先说结论：OpenCode 不是只绑定某一个模型。官方文档说明它通过 AI SDK 和 Models.dev 支持 75+ LLM Provider，也支持本地模型。实际能否使用，取决于你选择的 Provider、账号地区、API Key、余额、模型权限，以及 `/models` 中当前显示的列表。
+
+OpenCode 的模型写法通常是：
+
+```text
+provider_id/model_id
+```
+
+例如：
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "openai/gpt-5.1-codex"
+}
+```
+
+::: tip 选模型不要只看名气
+OpenCode 是编程 Agent，核心能力依赖代码理解、工具调用、长上下文、指令遵循和改文件稳定性。模型很强不代表一定适合 Agent 工作流；优先选择官方推荐、支持 tool calling、适合 coding 的模型。
+:::
+
+### 官方推荐的代表模型
+
+OpenCode 官方模型页当前列出的推荐示例包括：
+
+| 模型 | 适合场景 |
+|------|----------|
+| GPT 5.2 | 综合能力强，适合复杂代码理解、架构调整和多步骤任务 |
+| GPT 5.1 Codex | 偏代码 Agent 工作流，适合实现、修复、重构和测试 |
+| Claude Opus 4.5 | 高质量推理、复杂需求拆解和长上下文任务 |
+| Claude Sonnet 4.5 | 代码、文档、速度和成本比较均衡 |
+| MiniMax M2.1 | 成本和可用性友好，适合尝试国产模型路线 |
+| Gemini 3 Pro | 适合多模态、长上下文和复杂推理任务 |
+
+这个列表不是完整清单，也会随 OpenCode 和各 Provider 更新变化。最终以 `/models` 里实际可选项为准。
+
+### 国外顶尖闭源模型
+
+| Provider | 代表模型 ID / 名称 | 适合场景 |
+|----------|--------------------|----------|
+| OpenAI | `openai/gpt-5.2`、`openai/gpt-5.1-codex`、`openai/gpt-5-codex`、`openai/o3`、`openai/o4-mini` | 编程 Agent、复杂修复、测试生成、代码审查 |
+| Anthropic | `anthropic/claude-opus-4-5`、`anthropic/claude-sonnet-4-5`、`anthropic/claude-sonnet-4-6`、`anthropic/claude-haiku-4-5` | 长上下文、需求拆解、代码理解、文档重构 |
+| Google | `google/gemini-3-pro-preview`、`google/gemini-3-flash-preview`、`google/gemini-2.5-pro`、`google/gemini-2.5-flash` | 长上下文、多模态、快速迭代和综合任务 |
+| xAI | `xai/grok-4.3`、`xai/grok-4.20-0309-reasoning`、`xai/grok-build-0.1` | Grok 工作流、推理任务、代码实验 |
+| Mistral | `mistral/mistral-large-latest`、`mistral/mistral-medium-latest`、`mistral/codestral-latest`、`mistral/devstral-medium-latest` | 欧洲 Provider、代码模型、开源/商用混合路线 |
+
+选择建议：
+
+- 追求代码 Agent 综合效果：优先 GPT Codex、Claude Sonnet / Opus、Gemini Pro
+- 追求速度和成本：看 Mini / Flash / Haiku / Medium 级别模型
+- 追求特定生态：OpenAI 选 GPT / Codex，Anthropic 选 Claude，Google 选 Gemini
+
+### 国内大模型
+
+OpenCode Provider 目录中已经列出 DeepSeek、Moonshot AI、MiniMax、Z.AI 等 Provider；Qwen / 通义千问通常可以通过支持它的 Provider、聚合平台、本地模型或 OpenAI-compatible 自定义 Provider 接入。常见模型可以这样理解：
+
+| 模型厂商 / 系列 | 代表模型 ID / 名称 | 适合场景 |
+|-----------------|--------------------|----------|
+| DeepSeek | `deepseek/deepseek-v4-pro`、`deepseek/deepseek-v4-flash`、`deepseek/deepseek-r1`、`deepseek/deepseek-reasoner`、`deepseek/deepseek-chat` | 中文代码任务、推理、性价比路线 |
+| 阿里 Qwen / 通义千问 | `alibaba/qwen3-coder-plus`、`alibaba/qwen3-coder-480b-a35b-instruct`、`alibaba/qwen3-max`、`alibaba/qwen3-235b-a22b`、`alibaba/qwen3-next-80b-a3b-thinking` | 中文技术文档、代码生成、开源/本地部署路线 |
+| Moonshot / Kimi | `moonshotai/kimi-k2-thinking`、`moonshotai/kimi-k2-thinking-turbo`、`moonshotai/kimi-k2.6`、`moonshotai/kimi-k2.5` | 长上下文、中文资料整理、复杂推理 |
+| MiniMax | `minimax/MiniMax-M2.1`、`minimax/MiniMax-M2.5`、`minimax/MiniMax-M2.7`、`minimax/MiniMax-M3` | 成本友好的 Agent 实验、中文和代码混合任务 |
+| Z.AI / GLM | `zhipuai/glm-4.7`、`zhipuai/glm-4.7-flash`、`zhipuai/glm-5`、`zhipuai/glm-5.1`、`zhipuai/glm-4.5-air` | GLM 生态、中文任务、代码计划和实现 |
+
+::: warning 国内模型接入注意
+不要只按模型名字配置。不同 Provider 的模型 ID 可能不同，同一个模型也可能通过直连 API、聚合平台、本地推理、OpenAI-compatible 网关暴露成不同 ID。实际填写 `opencode.json` 前，先在 OpenCode 里执行 `/connect` 和 `/models`，以当前列表为准。
+:::
+
+其他国内模型，例如百度文心、腾讯混元、百川、零一万物 Yi、阶跃星辰、商汤日日新等，如果提供 OpenAI-compatible API，理论上可以按 OpenCode 的 Custom provider 方式配置；但是否适合 OpenCode 的代码 Agent 工作流，要看它们是否支持工具调用、流式输出、长上下文和稳定的代码能力。
+
+### 开源 / 开放权重模型
+
+OpenCode 可以通过 Ollama、LM Studio、llama.cpp、本地 OpenAI-compatible 服务，或 Hugging Face、Together AI、Fireworks、NVIDIA、Deep Infra、OpenRouter 等托管 Provider 使用开放模型。
+
+| 模型系列 | 代表模型 | 常见接入方式 |
+|----------|----------|--------------|
+| DeepSeek 开放模型 | DeepSeek-R1、DeepSeek Chat、DeepSeek Reasoner、DeepSeek V4 Flash / Pro | DeepSeek、Ollama、LM Studio、OpenRouter、Deep Infra、本地推理 |
+| Qwen 开放模型 | Qwen3 Coder、Qwen3 235B-A22B、Qwen3 Next、Qwen VL、Qwen Coder Flash | 本地推理、Cerebras、OpenRouter、STACKIT、Hugging Face、聚合 Provider |
+| Kimi K2 | Kimi K2 Thinking、Kimi K2 Thinking Turbo、Kimi K2.5 / K2.6 | Moonshot AI、OpenRouter、Nebius、托管推理平台 |
+| MiniMax 开放模型 | MiniMax M2、M2.1、M2.5、M2.7 | MiniMax、OpenRouter、托管推理平台 |
+| Meta Llama | Llama 4 Maverick、Llama 4 Scout、Llama 3.3 70B Instruct | Ollama、LM Studio、Hugging Face、Together AI、Groq、Deep Infra |
+| Mistral / Devstral / Codestral | Mistral Large、Mistral Small、Devstral、Codestral、Pixtral | Mistral、Ollama、LM Studio、OpenRouter、Together AI |
+| Google Gemma | Gemma 4 31B IT、Gemma 4 26B A4B IT | Ollama、LM Studio、Google、Hugging Face |
+| OpenAI gpt-oss | gpt-oss-120b、gpt-oss-20b / Ollama Cloud 版本 | Ollama Cloud、OVHcloud、Scaleway、DigitalOcean 等 |
+| NVIDIA Nemotron | nemotron-3-super-120b-a12b 等 | NVIDIA、NIM、本地或企业内部署 |
+
+本地模型常见三种跑法：
+
+| 方式 | 适合谁 | OpenCode 配置重点 |
+|------|--------|-------------------|
+| Ollama | 新手、本地快速试模型 | `baseURL` 常见为 `http://localhost:11434/v1` |
+| LM Studio | 想用图形界面下载和管理模型 | `baseURL` 常见为 `http://127.0.0.1:1234/v1` |
+| llama.cpp | 想要更底层、轻量、可控的本地推理 | 使用 `llama-server` 提供 OpenAI-compatible endpoint |
+
+::: tip 本地模型的现实预期
+本地模型更适合隐私敏感、低成本、可控实验；但代码 Agent 任务需要稳定 tool calling 和足够上下文。用 Ollama 时，如果工具调用不稳定，可以按官方建议增大 `num_ctx`，先从 16k 到 32k 级别测试。
+:::
+
+### 简单选择建议
+
+| 需求 | 优先选择 |
+|------|----------|
+| 最强代码实现和重构 | GPT Codex、Claude Sonnet / Opus、Gemini Pro |
+| 中文代码和文档 | DeepSeek、Qwen Coder、Kimi K2、GLM、MiniMax |
+| 长上下文资料整理 | Claude、Gemini、Kimi |
+| 成本敏感 | MiniMax、DeepSeek、Qwen、Flash / Mini / Haiku 级模型 |
+| 本地隐私 | Ollama / LM Studio + Qwen、DeepSeek、Llama、Mistral、Gemma |
+| 企业合规 | Azure OpenAI、Google Vertex AI、Amazon Bedrock、Snowflake Cortex、私有 OpenAI-compatible 网关 |
 
 ::: warning API Key 安全
 OpenCode 用 `/connect` 添加 Provider 凭证时，官方文档说明凭证会保存在本机用户目录下。不要把本机凭证文件、`.env` 或 API Key 提交到 Git。
@@ -428,7 +539,7 @@ OpenCode 本身是开源工具，但模型调用通常需要 Provider 的 API Ke
 
 ### OpenCode 支持哪些模型？
 
-官方文档说明它通过 AI SDK 和 Models.dev 支持 75+ Provider，并支持本地模型。实际可用模型取决于你的 Provider、地区、API Key 和余额。
+官方文档说明它通过 AI SDK 和 Models.dev 支持 75+ Provider，并支持本地模型。上面的“OpenCode 支持哪些模型？”章节已经按国外顶尖模型、国内大模型、开源/开放权重模型列出代表清单；实际可用项仍以 `/models` 当前显示为准。
 
 ### OpenCode 能用 ChatGPT Plus / Pro 吗？
 
@@ -529,6 +640,8 @@ OpenCode 需要把必要上下文发给你选择的模型 Provider 才能生成�
 - [OpenCode 官方文档](https://opencode.ai/docs/)
 - [OpenCode 配置文档](https://opencode.ai/docs/config)
 - [OpenCode Providers](https://opencode.ai/docs/providers/)
+- [OpenCode Models](https://opencode.ai/docs/models/)
+- [Models.dev](https://models.dev/)
 - [OpenCode Commands](https://opencode.ai/docs/commands/)
 - [OpenCode Agents](https://opencode.ai/docs/agents/)
 - [OpenCode GitHub 仓库](https://github.com/opencode-ai/opencode)

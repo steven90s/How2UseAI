@@ -278,6 +278,8 @@ git branch -D feature/git-tutorial
 
 ## 远程仓库
 
+远程仓库通常托管在 GitHub、GitLab、Gitee 等平台上。Git 负责本地提交和同步，GitHub 负责云端托管和协作。如果还没有配置 GitHub SSH Key，先看 [GitHub 使用教程：本地设备关联 GitHub](/terminal/github#本地设备关联-github-ssh-key-设置)。
+
 ### 查看远程地址
 
 ```bash
@@ -286,8 +288,22 @@ git remote -v
 
 ### 添加远程仓库
 
+SSH 地址：
+
+```bash
+git remote add origin git@github.com:user/repo.git
+```
+
+HTTPS 地址：
+
 ```bash
 git remote add origin https://github.com/user/repo.git
+```
+
+如果已经有 `origin`，不要重复添加，改用：
+
+```bash
+git remote set-url origin git@github.com:user/repo.git
 ```
 
 ### 推送
